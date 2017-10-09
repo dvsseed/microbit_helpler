@@ -22,12 +22,16 @@ melodys = ''
 temp_t = 0
 show_led = ''
 clear_led = False
+clear_music = False
+clear_mb = False
 
 class BBCmicrobit:
 
     def __init__(self):
         self.led = ''
         self.cls = False
+        self.sm = False
+        self.rst = False
 
     def _is_connected(self):
         return
@@ -92,6 +96,16 @@ class BBCmicrobit:
             melodys = ''
         return melodys
 
+    @command("Stop music")
+    def stop_music(self):
+        self.sm = not self.sm
+        global clear_music
+        clear_music = self.sm
+
+    @reporter("stop")
+    def get_stop(self):
+        return self.sm
+
     @reporter("temp_t")
     def temp_t(self):
         return temp_t
@@ -120,6 +134,16 @@ class BBCmicrobit:
     def get_clear(self):
         return self.cls
 
+    @command("Reset microbit")
+    def reset_mb(self):
+        self.rst = not self.rst
+        global clear_mb
+        clear_mb = self.rst
+
+    @reporter("reset")
+    def get_reset(self):
+        return self.rst
+
 def serial_proc():
     global acc_x
     global acc_y
@@ -133,11 +157,9 @@ def serial_proc():
     global melodys
     global temp_t
     global show_led
-    global clear_led
 
     # the port will depend on your computer
     # for a raspberry pi it will probably be /dev/ttyACM0
-    # PORT = "/dev/ttyACM0"
     # for windows it will be COM(something)
     if os.name == "nt":
         PORT = "COM14"
@@ -158,12 +180,10 @@ def serial_proc():
     # s.flushInput()  # flush input buffer, discarding all its contents
     # s.flushOutput()  # flush output buffer, aborting current output
 
-    playing_time = 0
+    play_time = None
 
     try:
         while True:
-            playing_time = running_time()
-
             # Serial Communication (Receiving)
             # read a line from the microbit, decode it and
             # strip the whitespace at the end
@@ -180,23 +200,28 @@ def serial_proc():
             btn_a = ba
             btn_b = bb
             temp_t = tp
-            # for testing
+
             #print(acc_x, acc_y, acc_z, comp_x, comp_y, comp_z, btn_a, btn_b, temp_t)
             # time.sleep(0.2)
 
             # Serial Communication (Sending)
             # Writing Data
             if clear_led:
-                # send_to_mb = b'OFF.\n'
                 send_to_mb = 'OFF.'
+            elif clear_mb:
+                send_to_mb = 'OFFRESET.'
+            elif clear_music:
+                send_to_mb = 'OFFMUSIC.'
             elif pins != '':
                 send_to_mb = pins
             elif melodys != '':
-
-                send_to_mb = melodys
-                print(running_time() - playing_time)
+                # replay music must be limited for 15 seconds
+                if play_time == None or int(time.time() - play_time) > 15:
+                    play_time = time.time()
+                    send_to_mb = melodys
+                else:
+                    send_to_mb = ''
             else:
-                # send_to_mb = show_led + b'\n'
                 send_to_mb = show_led
             s.write(send_to_mb.encode('utf-8'))
             # time.sleep(0.2)
