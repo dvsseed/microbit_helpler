@@ -4,6 +4,8 @@ Creating a Scratch 2.0 Extension for BBC micro:bit.
 ## Install requirements:
 
 
+## Instructions
+
 1. python2 -m pip install blockext==0.2.0a2
 2. python2 -m pip install pyserial
 3. Open the **Scratch 2.0 Offline Editor**
@@ -14,4 +16,9 @@ Creating a Scratch 2.0 Extension for BBC micro:bit.
 
 microbit_ext.py (using blockext)
 
-# python
+## Reference
+
+## Notes and Credits
+
+## Thanks to CodeClubRik for
+
