@@ -1,4 +1,4 @@
-REM Modify this file for your serial port designator and for the location of python.
+REM Modify this file for your USB Serial Port and for the location of python.
 REM Move this file to the directory that contains microbit_helpler.py
 REM and execute it by opening the file explorer and double clicking.
 REM You can also create a desktop shortcut if you like.
