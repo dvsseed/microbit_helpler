@@ -20,5 +20,5 @@ microbit_ext.py (using blockext)
 
 ## Notes and Credits
 
-## Thanks to CodeClubRik for
+## Thanks to xxxxxx for
 
