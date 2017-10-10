@@ -17,7 +17,14 @@ choice the file of _microbit_helper.s2e_
 6. Test your extension and iterate!
 
 
-microbit_ext.py (using blockext)
+microbit_hex.hex
+
+microbit_helper.py (using blockext)
+
+microbit_helper_zh_tw.s2e
+microbit_helper.s2e
+microbit_sample.sb2
+
 
 ## Reference
 
