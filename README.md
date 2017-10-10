@@ -22,7 +22,9 @@ microbit_hex.hex
 microbit_helper.py (using blockext)
 
 microbit_helper_zh_tw.s2e
+
 microbit_helper.s2e
+
 microbit_sample.sb2
 
 
