@@ -1,7 +1,29 @@
-# coding=utf-8
+#!/usr/bin/env python
+
+# -*- coding: utf-8 -*-
+
+"""
+Created on Tue Oct 10 12:49:59 2017
+@author: Davis, Tseng @Taiwan
+Copyright (c) 2017-18 Davis Tseng All right reserved.
+
+This program is free software;
+you can redistribute it and/or modify it under the terms of the GNU 
+Lesser General Public License as published by the Free Software Foundation;
+either version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License along with this library;
+if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+"""
+
 from __future__ import unicode_literals
 
 import os
+import sys
 import time
 import serial
 import thread
@@ -41,6 +63,12 @@ class BBCmicrobit:
             return "The Scratch Sensor board is not connected. Foo."
 
     def _on_reset(self):
+        global show_led
+        show_led = ''
+        global pins
+        pins = ''
+        global melodys
+        melodys = ''
         print("""
         Reset! The red stop button has been clicked,
         And now everything is how it was.
@@ -72,11 +100,11 @@ class BBCmicrobit:
 
     @reporter("btn_a")
     def btn_a(self):
-        return btn_a
+        return str(btn_a).lower()
 
     @reporter("btn_b")
     def btn_b(self):
-        return btn_b
+        return str(btn_b).lower()
 
     @command("%m.status : Write on %m.inputs digital value %m.high_low", defaults=["off", "P0", "0"])
     def show_pin(self, status, inputs, high_low):
@@ -98,8 +126,8 @@ class BBCmicrobit:
 
     @command("Stop music")
     def stop_music(self):
-        self.sm = not self.sm
         global clear_music
+        self.sm = True
         clear_music = self.sm
 
     @reporter("stop")
@@ -114,11 +142,15 @@ class BBCmicrobit:
     def show_image(self, imgs):
         return imgs
 
-    @command("Set LED to %s")
-    def set_led(self, value=''):
-        self.led = value
+    @command("%m.status : Set LED to %s", defaults=["off", ""])
+    def set_led(self, status, value):
         global show_led
-        show_led = value
+        if status == 'on':
+            self.led = value
+            show_led = value
+        else:
+            show_led = ''
+        return show_led
 
     @reporter("led")
     def get_led(self):
@@ -126,8 +158,8 @@ class BBCmicrobit:
 
     @command("Clear display")
     def off_led(self):
-        self.cls = not self.cls
         global clear_led
+        self.cls = True
         clear_led = self.cls
 
     @reporter("clear")
@@ -136,8 +168,8 @@ class BBCmicrobit:
 
     @command("Reset microbit")
     def reset_mb(self):
-        self.rst = not self.rst
         global clear_mb
+        self.rst = True
         clear_mb = self.rst
 
     @reporter("reset")
@@ -157,17 +189,23 @@ def serial_proc():
     global melodys
     global temp_t
     global show_led
+    global clear_mb
+    global clear_music
+    global clear_led
 
     # the port will depend on your computer
     # for a raspberry pi it will probably be /dev/ttyACM0
     # for windows it will be COM(something)
-    if os.name == "nt":
-        PORT = "COM14"
-    elif os.name == "posix":
-        # PORT = "/dev/cu.usbmodem1412"
-        PORT = "/dev/cu.usbmodem1422"
+    if len(sys.argv) == 2:
+        PORT = str(sys.argv[1])
     else:
-        PORT = "/dev/ttyACM0"
+        if os.name == "nt":
+            PORT = "COM14"
+        elif os.name == "posix":
+            # PORT = "/dev/cu.usbmodem1412"
+            PORT = "/dev/cu.usbmodem1422"
+        else:
+            PORT = "/dev/ttyACM0"
 
     #
     BAUD = 115200
@@ -206,24 +244,42 @@ def serial_proc():
 
             # Serial Communication (Sending)
             # Writing Data
+            send_to_mb = ''
             if clear_led:
-                send_to_mb = 'OFF.'
-            elif clear_mb:
-                send_to_mb = 'OFFRESET.'
-            elif clear_music:
-                send_to_mb = 'OFFMUSIC.'
-            elif pins != '':
-                send_to_mb = pins
-            elif melodys != '':
+                send_to_mb = send_to_mb + 'OFF:'
+                clear_led = False
+            else:
+                send_to_mb = send_to_mb + 'none:'
+            if clear_mb:
+                send_to_mb = send_to_mb + 'OFFRESET:'
+                clear_mb = False
+            else:
+                send_to_mb = send_to_mb + 'none:'
+            if clear_music:
+                send_to_mb = send_to_mb + 'OFFMUSIC:'
+                clear_music = False
+            else:
+                send_to_mb = send_to_mb + 'none:'
+            if show_led != '':
+                send_to_mb = send_to_mb + show_led + ':'
+            else:
+                send_to_mb = send_to_mb + 'none:'
+            if pins != '':
+                send_to_mb = send_to_mb + pins + ':'
+            else:
+                send_to_mb = send_to_mb + 'none:'
+            if melodys != '':
                 # replay music must be limited for 15 seconds
                 if play_time == None or int(time.time() - play_time) > 15:
                     play_time = time.time()
-                    send_to_mb = melodys
+                    send_to_mb = send_to_mb + melodys
                 else:
-                    send_to_mb = ''
+                    send_to_mb = send_to_mb + 'none'
             else:
-                send_to_mb = show_led
+                send_to_mb = send_to_mb + 'none'
+
             s.write(send_to_mb.encode('utf-8'))
+            # print(send_to_mb)
             # time.sleep(0.2)
 
     finally:
@@ -258,7 +314,7 @@ descriptor = Descriptor(
         high_low = ["0", "1"],
         bools = ["true", "false"],
         musics = ["music.DADADADUM", "music.ENTERTAINER", "music.PRELUDE", "music.ODE", "music.NYAN", "music.RINGTONE", "music.FUNK", "music.BLUES", "music.BIRTHDAY", "music.WEDDING", "music.FUNERAL", "music.PUNCHLINE", "music.PYTHON", "music.BADDY", "music.JUMP_UP", "music.JUMP_DOWN", "music.POWER_UP", "music.POWER_DOWN"],
-        imgs = ["Image.HEART", "Image.HAPPY", "Image.SMILE", "Image.ANGRY", "Image.YES", "Image.NO", "Image.CLOCK12", "Image.ALL_CLOCKS", "Image.ARROW_N", "Image.ALL_ARROWS"],
+        imgs = ["Image.HEART", "Image.HAPPY", "Image.SMILE", "Image.ANGRY", "Image.YES", "Image.NO", "Image.CLOCK12", "Image.CLOCK11", "Image.CLOCK10", "Image.CLOCK9", "Image.CLOCK8", "Image.CLOCK7", "Image.CLOCK6", "Image.CLOCK5", "Image.CLOCK4", "Image.CLOCK3", "Image.CLOCK2", "Image.CLOCK1", "Image.ALL_CLOCKS", "Image.ARROW_N", "Image.ARROW_NE", "Image.ARROW_E", "Image.ARROW_SE", "Image.ARROW_S", "Image.ARROW_SW", "Image.ARROW_W", "Image.ARROW_NW", "Image.ALL_ARROWS"],
     ),
 )
 
