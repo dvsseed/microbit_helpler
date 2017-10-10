@@ -13,8 +13,8 @@
         ["", "", ""],
         ["r", "Temperature(degrees Celcius)", "temp_t"],
         ["", "", ""],
-        ["r", "Pressed button-A", "btn_a"],
-        ["r", "Pressed button-B", "btn_b"],
+        ["b", "Pressed button-A?", "btn_a"],
+        ["b", "Pressed button-B?", "btn_b"],
         ["", "", ""],
         [" ", "%m.status : Write on %m.inputs digital value %m.high_low", "show_pin", "off", "P0", "0"],
         ["", "", ""],
@@ -23,7 +23,7 @@
         ["r", "stop", "get_stop"],
         ["", "", ""],
         ["r", "Image of %m.imgs", "show_image", "Image.HAPPY"],
-        [" ", "Set LED to %s", "set_led", "Hello, World!"],
+        [" ", "%m.status : Set LED to %s", "set_led", "off", "Hello, World!"],
         ["r", "led", "get_led"],
         [" ", "Clear display", "off_led"],
         ["r", "clear", "get_clear"],
@@ -37,6 +37,6 @@
         "high_low": ["0", "1"],
         "bools": ["true", "false"],
         "musics": ["music.DADADADUM", "music.ENTERTAINER", "music.PRELUDE", "music.ODE", "music.NYAN", "music.RINGTONE", "music.FUNK", "music.BLUES", "music.BIRTHDAY", "music.WEDDING", "music.FUNERAL", "music.PUNCHLINE", "music.PYTHON", "music.BADDY", "music.JUMP_UP", "music.JUMP_DOWN", "music.POWER_UP", "music.POWER_DOWN"],
-        "imgs": ["Image.HEART", "Image.HAPPY", "Image.SMILE", "Image.ANGRY", "Image.YES", "Image.NO", "Image.CLOCK12", "Image.ALL_CLOCKS", "Image.ARROW_N", "Image.ALL_ARROWS"],
+        "imgs": ["Image.HEART", "Image.HAPPY", "Image.SMILE", "Image.ANGRY", "Image.YES", "Image.NO", "Image.CLOCK12", "Image.CLOCK11", "Image.CLOCK10", "Image.CLOCK9", "Image.CLOCK8", "Image.CLOCK7", "Image.CLOCK6", "Image.CLOCK5", "Image.CLOCK4", "Image.CLOCK3", "Image.CLOCK2", "Image.CLOCK1", "Image.ALL_CLOCKS", "Image.ARROW_N", "Image.ARROW_NE", "Image.ARROW_E", "Image.ARROW_SE", "Image.ARROW_S", "Image.ARROW_SW", "Image.ARROW_W", "Image.ARROW_NW", "Image.ALL_ARROWS"],
     }
 }
