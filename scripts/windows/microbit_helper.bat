@@ -4,5 +4,6 @@ REM and execute it by opening the file explorer and double clicking.
 REM You can also create a desktop shortcut if you like.
 REM Right-click on this file in the Windows File Explorer and select shortcut to create the shortcut.
 REM Make sure that this file is executable as well as microbit_helpler.py
+@echo off
 
 C:\Python27\python microbit_helpler.py com14
