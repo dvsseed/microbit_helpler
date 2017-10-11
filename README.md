@@ -28,6 +28,9 @@ microbit_helper.s2e
 microbit_sample.sb2
 
 
+![image](https://github.com/dvsseed/microbit_helpler/blob/master/Scratch_2_Offline_Editor.png)
+
+
 ## Reference
 
 ## Notes and Credits
