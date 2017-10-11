@@ -5,7 +5,7 @@
 """
 Created on Tue Oct 10 12:49:59 2017
 @author: Davis, Tseng @Taiwan
-Copyright (c) 2017-18 Davis Tseng All right reserved.
+Copyright (c) 2017-18 Davis Tseng  All right reserved.
 
 This program is free software;
 you can redistribute it and/or modify it under the terms of the GNU 
@@ -26,6 +26,7 @@ import os
 import sys
 import time
 import serial
+import serial.tools.list_ports
 import thread
 
 from blockext import *
@@ -72,6 +73,8 @@ class BBCmicrobit:
         print("""
         Reset! The red stop button has been clicked,
         And now everything is how it was.
+        If you want to stop this shell scripting,
+        please use <Ctrl-C> to exit.
         """)
 
     @reporter("acc_x")
@@ -196,16 +199,25 @@ def serial_proc():
     # the port will depend on your computer
     # for a raspberry pi it will probably be /dev/ttyACM0
     # for windows it will be COM(something)
+    PORT = None
     if len(sys.argv) == 2:
         PORT = str(sys.argv[1])
     else:
-        if os.name == "nt":
-            PORT = "COM14"
-        elif os.name == "posix":
-            # PORT = "/dev/cu.usbmodem1412"
-            PORT = "/dev/cu.usbmodem1422"
-        else:
-            PORT = "/dev/ttyACM0"
+        ports = list(serial.tools.list_ports.comports())
+        for p in ports:
+            if str(p).find('COM') != -1 and os.name == "nt":
+                PORT = p
+                # PORT = "COM14"
+            elif str(p).find('usb') != -1 and os.name == "posix":
+                PORT = p
+                # PORT = "/dev/cu.usbmodem1412"
+                # PORT = "/dev/cu.usbmodem1422"
+            else:
+                PORT = "/dev/ttyACM0"
+    if PORT == None:
+        print('The micro:bit should be plugged into a USB socket, please.')
+        # to exit the entire thread
+        os._exit(1)
 
     #
     BAUD = 115200
