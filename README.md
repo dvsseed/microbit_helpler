@@ -1,5 +1,5 @@
 # About microbit_helpler
-microbit_helpler is try to create a Scratch 2.0 Extension for BBC micro:bit by COM serial port.
+microbit_helpler is try to create a Scratch 2.0 Extension for BBC micro:bit through the COM serial port to send/receive the self-defined data.
 
 ## Installation:
 1. python2 -m pip install blockext==0.2.0a2
