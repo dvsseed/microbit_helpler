@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/local/bin/python
 
 # -*- coding: utf-8 -*-
 
@@ -205,16 +205,19 @@ def serial_proc():
     else:
         ports = list(serial.tools.list_ports.comports())
         for p in ports:
-            if str(p).find('COM') != -1 and os.name == "nt":
-                PORT = p
+            sp = str(p)
+            if sp.find('COM') != -1 and sp.find('mbed') != -1 and os.name == "nt":
+                lslice = sp.find('(') + 1
+                rslice = sp.find(')')
+                PORT = sp[lslice:rslice]
                 # PORT = "COM14"
-            elif str(p).find('usb') != -1 and os.name == "posix":
-                PORT = p
+            elif sp.find('usb') != -1 and os.name == "posix":
+                PORT = sp[0:sp.find(' ')]
                 # PORT = "/dev/cu.usbmodem1412"
                 # PORT = "/dev/cu.usbmodem1422"
             else:
                 PORT = "/dev/ttyACM0"
-    if PORT == None:
+    if PORT is None:
         print('The micro:bit should be plugged into a USB socket, please.')
         # to exit the entire thread
         os._exit(1)
