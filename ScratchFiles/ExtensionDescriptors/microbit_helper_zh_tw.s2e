@@ -1,7 +1,7 @@
 {
     "extensionName": "BBC micro:bit Extension",
     "extensionPort": 54321,
-    "url": "https://github.com/",
+    "url": "https://github.com/dvsseed/microbit_helpler",
     "blockSpecs": [
         ["r", "加速度感應值(mg) x", "acc_x"],
         ["r", "加速度感應值(mg) y", "acc_y"],
