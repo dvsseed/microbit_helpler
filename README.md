@@ -34,6 +34,11 @@ microbit_sample.sb2
 ## Reference
 
 ## Notes and Credits
+* [BBC micro:bit](http://microbit.org/)
+* [MIT SCRATCH](https://scratch.mit.edu/)
+* [Python](https://www.python.org/)
+* [lyshie](https://github.com/lyshie/scratch2-microbit)
+* [blockext](http://blockext.org)
 
 ## Thanks to xxxxxx for
 
