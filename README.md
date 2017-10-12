@@ -13,7 +13,7 @@ choice the file of _microbit_helper.s2e_
 3. The new extension blocks will appear in the More Blocks palette
 4. Test your extension and iterate!
 
-or directly to the ScratchFiles/ScratchProjects/ directory and Double-click at _microbit_sample.sb2_ example file and you can play the game.
+or directly to the **ScratchFiles/ScratchProjects/** directory and Double-click at _microbit_sample.sb2_ example file and you can play the game.
 
 ## Source files
 
