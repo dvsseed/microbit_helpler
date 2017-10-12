@@ -32,7 +32,7 @@ or directly to the **ScratchFiles/ScratchProjects/** directory and Double-click 
 * [BBC micro:bit](http://microbit.org/)
 * [MIT SCRATCH](https://scratch.mit.edu/)
 * [Python](https://www.python.org/)
-* [lyshie](https://github.com/lyshie/scratch2-microbit)
+* [Teacher HSIEH, Li-Yi](https://github.com/lyshie/scratch2-microbit)
 * [blockext](http://blockext.org)
 
 ## License
